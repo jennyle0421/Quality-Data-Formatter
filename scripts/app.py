@@ -80,6 +80,7 @@ def to_excel(df):
             "border": 1
         })
 
+        # Apply header styling
         for col_num, value in enumerate(df.columns.values):
             worksheet.write(0, col_num, value, header_format)
 
@@ -87,6 +88,23 @@ def to_excel(df):
         defect_col_index = df.columns.get_loc("Defect Rate (%)")
         percent_format = workbook.add_format({"num_format": "0.00%", "border": 1})
         worksheet.set_column(defect_col_index, defect_col_index, 15, percent_format)
+
+        # 🔹 Fix "Production Date" column width & formatting to avoid #####
+        date_col_index = df.columns.get_loc("Production Date")
+        date_format = workbook.add_format({"num_format": "yyyy-mm-dd", "border": 1})
+        worksheet.set_column(date_col_index, date_col_index, 20, date_format)
+
+        # 🔹 Right-align numeric columns with thousand separators
+        numeric_format = workbook.add_format({"align": "right", "num_format": "#,##0", "border": 1})
+        for col_name in ["Units Produced", "Defective Units"]:
+            col_idx = df.columns.get_loc(col_name)
+            worksheet.set_column(col_idx, col_idx, 15, numeric_format)
+
+        # 🔹 Auto-size remaining columns for better readability
+        for idx, col in enumerate(df.columns):
+            if idx not in [defect_col_index, date_col_index]:
+                max_len = max(df[col].astype(str).map(len).max(), len(col)) + 2
+                worksheet.set_column(idx, idx, max_len)
 
     output.seek(0)
     return output
