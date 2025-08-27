@@ -56,7 +56,8 @@ def generate_mock_data(num_records=200):
         "Operator Name", "Shift"
     ])
 
-    df.sort_values(by="Production Date", ascending=False, inplace=True)
+    # 🔹 Sort by Production Date in ASCENDING order by default
+    df.sort_values(by="Production Date", ascending=True, inplace=True)
     return df
 
 # ---------------------
@@ -105,6 +106,9 @@ def to_excel(df):
             if idx not in [defect_col_index, date_col_index]:
                 max_len = max(df[col].astype(str).map(len).max(), len(col)) + 2
                 worksheet.set_column(idx, idx, max_len)
+
+        # 🔹 Freeze header row for better scrolling in Excel
+        worksheet.freeze_panes(1, 0)
 
     output.seek(0)
     return output
