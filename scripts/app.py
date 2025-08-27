@@ -56,7 +56,7 @@ def generate_mock_data(num_records=200):
         "Operator Name", "Shift"
     ])
 
-    # 🔹 Sort by Production Date in ASCENDING order by default
+    # Sort ascending by default for consistency in output
     df.sort_values(by="Production Date", ascending=True, inplace=True)
     return df
 
@@ -90,24 +90,24 @@ def to_excel(df):
         percent_format = workbook.add_format({"num_format": "0.00%", "border": 1})
         worksheet.set_column(defect_col_index, defect_col_index, 15, percent_format)
 
-        # 🔹 Fix "Production Date" column width & formatting to avoid #####
+        # Fix "Production Date" column width & formatting to avoid #####
         date_col_index = df.columns.get_loc("Production Date")
         date_format = workbook.add_format({"num_format": "yyyy-mm-dd", "border": 1})
         worksheet.set_column(date_col_index, date_col_index, 20, date_format)
 
-        # 🔹 Right-align numeric columns with thousand separators
+        # Right-align numeric columns with thousand separators
         numeric_format = workbook.add_format({"align": "right", "num_format": "#,##0", "border": 1})
         for col_name in ["Units Produced", "Defective Units"]:
             col_idx = df.columns.get_loc(col_name)
             worksheet.set_column(col_idx, col_idx, 15, numeric_format)
 
-        # 🔹 Auto-size remaining columns for better readability
+        # Auto-size remaining columns for better readability
         for idx, col in enumerate(df.columns):
             if idx not in [defect_col_index, date_col_index]:
                 max_len = max(df[col].astype(str).map(len).max(), len(col)) + 2
                 worksheet.set_column(idx, idx, max_len)
 
-        # 🔹 Freeze header row for better scrolling in Excel
+        # Freeze header row for easier scrolling
         worksheet.freeze_panes(1, 0)
 
     output.seek(0)
@@ -124,10 +124,13 @@ if st.sidebar.button("Generate Mock Data"):
     st.success(f"✅ Generated {num_records} rows of Deere manufacturing data!")
 
     st.subheader("📄 Preview of Generated Data")
-    st.dataframe(df)
 
-    # CSV download
-    csv = df.to_csv(index=False).encode("utf-8")
+    # Force ascending sort in preview
+    df_preview = df.sort_values(by="Production Date", ascending=True).reset_index(drop=True)
+    st.dataframe(df_preview)
+
+    # CSV download (sorted ascending)
+    csv = df_preview.to_csv(index=False).encode("utf-8")
     st.download_button(
         label="⬇️ Download CSV",
         data=csv,
@@ -135,8 +138,8 @@ if st.sidebar.button("Generate Mock Data"):
         mime="text/csv"
     )
 
-    # Excel download
-    excel = to_excel(df)
+    # Excel download (sorted ascending)
+    excel = to_excel(df_preview)
     st.download_button(
         label="⬇️ Download Excel",
         data=excel,
