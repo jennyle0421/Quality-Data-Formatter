@@ -1,0 +1,14 @@
+# Virtual environment
+venv/
+
+# Python cache files
+__pycache__/
+*.pyc
+
+# CSV & Excel reports
+reports/
+*.csv
+*.xlsx
+
+# Streamlit configs
+.streamlit/
