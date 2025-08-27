@@ -37,7 +37,7 @@ This app:
 
 ## 🖼️ Preview
 
-*(Add visuals after deployment)*
+| ![App Screenshot](Image1.png) |
 
 | Data Table | Excel Report |
 |------------|--------------|
