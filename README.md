@@ -98,9 +98,9 @@ This app is hosted on **Streamlit Cloud**, auto-updated from GitHub with every p
 ---
 
 ## 👤 Author
-
-**Jenny Le**   
-[LinkedIn](https://www.linkedin.com/in/jenny-le0421/) | [Email] (jenny.le0421@gmail.com)
+ 
+**Jenny Le**  
+[LinkedIn](https://www.linkedin.com/in/jenny-le0421/) | [Email](mailto:jenny.le0421@gmail.com)
 
 ---
 
